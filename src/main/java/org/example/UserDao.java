@@ -3,26 +3,14 @@ package org.example;
 import java.sql.*;
 
 public class UserDao {
-    private Connection getConnection() {
-        String url = "jdbc:h2:mem://localhost/~/jdbc-practice;MODE=MySQL;DB_CLOSE_DELAY=-1";
-        String id = "sa";
-        String pw = "";
 
-        try {
-            Class.forName("org.h2.Driver");
-            return DriverManager.getConnection(url, id, pw);
-
-        } catch (Exception e) {
-            throw null;
-        }
-    }
 
     public void create(User user) throws SQLException {
         Connection con = null;
         PreparedStatement preparedStatement = null;
 
         try {
-            con = getConnection();
+            con = ConnectionManager.getConnection();
             String sql = "INSERT INTO USERS VALUES (?, ?, ?, ?)";
             preparedStatement = con.prepareStatement(sql);
             preparedStatement.setString(1, user.getUserId());
@@ -48,7 +36,7 @@ public class UserDao {
         ResultSet resultSet = null;
 
         try {
-            con = getConnection();
+            con = ConnectionManager.getConnection();
             String sql = "SELECT userId, password, name, email FROM USERS WHERE userId = ?";
             preparedStatement = con.prepareStatement(sql);
             preparedStatement.setString(1, userId);
